@@ -1,0 +1,337 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap");
+@import "tailwindcss";
+
+/* ── Design Tokens ────────────────────────────────────────────────────────── */
+:root {
+  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", "Fira Code", monospace;
+
+  /* Accent palette */
+  --accent-1: #00ffa3;
+  --accent-2: #00c9ff;
+  --accent-glow: rgba(0, 255, 163, 0.18);
+  --accent-glow-2: rgba(0, 201, 255, 0.12);
+
+  /* Surface colours */
+  --surface-bg: #09090b;
+  --surface-card: #111113;
+  --surface-card-hover: #18181b;
+  --surface-input: #0c0c0e;
+  --border-default: rgba(255, 255, 255, 0.07);
+  --border-focus: rgba(0, 255, 163, 0.45);
+  --border-hover: rgba(255, 255, 255, 0.14);
+}
+
+/* ── Base Reset ───────────────────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--surface-bg);
+  color: #e4e4e7;
+  min-height: 100dvh;
+}
+
+/* ── Selection ────────────────────────────────────────────────────────────── */
+::selection {
+  background: var(--accent-1);
+  color: #09090b;
+}
+
+/* ────────────────────────────────────────────────────────────────────────────
+   ANIMATIONS
+   ──────────────────────────────────────────────────────────────────────────── */
+
+/* Fade + slide up on mount */
+@keyframes fadeSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Shimmer sweep across card border */
+@keyframes borderShimmer {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Pulsing glow ring for the button */
+@keyframes glowPulse {
+  0%, 100% { box-shadow: 0 0 0 0 var(--accent-glow); }
+  50%       { box-shadow: 0 0 24px 6px var(--accent-glow); }
+}
+
+/* Spinning loader arc */
+@keyframes spinArc {
+  to { transform: rotate(360deg); }
+}
+
+/* Error banner slide-in from top */
+@keyframes errorSlideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Subtle background noise / grain float */
+@keyframes grainDrift {
+  0%, 100% { transform: translate(0, 0); }
+  25%       { transform: translate(-1px, 1px); }
+  50%       { transform: translate(1px, -1px); }
+  75%       { transform: translate(-1px, -1px); }
+}
+
+/* Success flash */
+@keyframes successFlash {
+  0%   { background-color: rgba(0, 255, 163, 0.15); }
+  100% { background-color: transparent; }
+}
+
+/* ────────────────────────────────────────────────────────────────────────────
+   UTILITY CLASSES
+   ──────────────────────────────────────────────────────────────────────────── */
+
+.animate-fade-slide-up {
+  animation: fadeSlideUp 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.animate-error-slide {
+  animation: errorSlideDown 0.3s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.animate-spin-arc {
+  animation: spinArc 0.9s linear infinite;
+}
+
+.animate-glow-pulse {
+  animation: glowPulse 2.2s ease-in-out infinite;
+}
+
+/* ── Card Component ───────────────────────────────────────────────────────── */
+.harvester-card {
+  position: relative;
+  background: var(--surface-card);
+  border-radius: 20px;
+  padding: 2.5rem;
+  border: 1px solid var(--border-default);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  overflow: hidden;
+}
+
+.harvester-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    ellipse at 50% -20%,
+    rgba(0, 255, 163, 0.05) 0%,
+    transparent 65%
+  );
+  pointer-events: none;
+}
+
+.harvester-card:hover {
+  border-color: var(--border-hover);
+  box-shadow: 0 0 0 1px var(--border-hover),
+              0 24px 64px rgba(0, 0, 0, 0.6);
+}
+
+/* ── Input Component ──────────────────────────────────────────────────────── */
+.harvester-input {
+  width: 100%;
+  background: var(--surface-input);
+  border: 1px solid var(--border-default);
+  border-radius: 12px;
+  padding: 14px 18px;
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  color: #d4d4d8;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.harvester-input::placeholder {
+  color: #3f3f46;
+}
+
+.harvester-input:focus {
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+
+.harvester-input:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ── Button Component ─────────────────────────────────────────────────────── */
+.harvester-btn {
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  border: none;
+  border-radius: 12px;
+  padding: 15px 24px;
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.harvester-btn-idle {
+  background: linear-gradient(135deg, var(--accent-1) 0%, var(--accent-2) 100%);
+  color: #09090b;
+}
+
+.harvester-btn-idle:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px var(--accent-glow), 0 0 0 1px var(--accent-1);
+}
+
+.harvester-btn-idle:active {
+  transform: translateY(0);
+}
+
+.harvester-btn-loading {
+  background: #18181b;
+  color: #52525b;
+  cursor: not-allowed;
+  border: 1px solid var(--border-default);
+}
+
+/* Shimmer sweep on loading button */
+.harvester-btn-loading::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.04) 50%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: borderShimmer 1.8s ease infinite;
+}
+
+/* ── Tag Badge ────────────────────────────────────────────────────────────── */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(0, 255, 163, 0.06);
+  border: 1px solid rgba(0, 255, 163, 0.18);
+  padding: 5px 12px;
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  color: var(--accent-1);
+}
+
+.status-badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent-1);
+  box-shadow: 0 0 6px var(--accent-1);
+  animation: glowPulse 2s ease-in-out infinite;
+}
+
+/* ── Error Banner ─────────────────────────────────────────────────────────── */
+.error-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  border-radius: 12px;
+  padding: 14px 16px;
+  font-size: 0.8rem;
+  color: #fca5a5;
+  line-height: 1.5;
+}
+
+/* ── Success Banner ───────────────────────────────────────────────────────── */
+.success-banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(0, 255, 163, 0.07);
+  border: 1px solid rgba(0, 255, 163, 0.2);
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-size: 0.8rem;
+  color: var(--accent-1);
+}
+
+/* ── Divider ──────────────────────────────────────────────────────────────── */
+.harvester-divider {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--border-default) 30%,
+    var(--border-default) 70%,
+    transparent
+  );
+  margin: 1.75rem 0;
+}
+
+/* ── Stat Chips ───────────────────────────────────────────────────────────── */
+.stat-chip {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border-default);
+  border-radius: 10px;
+}
+
+.stat-chip-label {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  color: #52525b;
+  text-transform: uppercase;
+}
+
+.stat-chip-value {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: #a1a1aa;
+}
+
+/* ── Background grid texture ──────────────────────────────────────────────── */
+.bg-grid {
+  background-image:
+    linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
