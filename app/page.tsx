@@ -236,6 +236,32 @@ export default function Home() {
           )}
         </div>
       </div>
+
+      {/* Guidelines & Terms of Service Footer */}
+      <div className="w-full max-w-xl mt-6 text-xs text-zinc-500 flex flex-col gap-4 px-2">
+        <details className="group cursor-pointer">
+          <summary className="font-mono uppercase tracking-wider text-zinc-400 select-none hover:text-zinc-300 transition-colors flex items-center gap-2 list-none">
+            <span className="transition-transform group-open:rotate-90">▶</span>
+            Guidelines & Terms of Service
+          </summary>
+          <div className="mt-3 flex flex-col gap-4 text-zinc-500 cursor-default border-l border-zinc-800 pl-4 py-1 leading-relaxed">
+            <div>
+              <h4 className="font-semibold text-zinc-400 mb-1">Target Site Compatibility</h4>
+              <ul className="list-disc list-inside flex flex-col gap-1">
+                <li><strong>Static HTML Tables:</strong> Targets must contain raw HTML table elements (`&lt;tr&gt;`). The engine does not execute client-side JavaScript.</li>
+                <li><strong>Access & Firewalls:</strong> The engine cannot bypass strict bot protection (e.g. Cloudflare, Captchas). Requests to protected targets will result in a 403 error.</li>
+                <li><strong>Data Yield:</strong> A minimum of 2 table rows is required to build a valid matrix CSV.</li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="font-semibold text-zinc-400 mb-1">Legal Disclaimer</h4>
+              <p>
+                This tool is an internal developer utility intended for parsing open, public directories. By inputting a URL, you confirm you have permission to extract data from that target and that your query complies with their `robots.txt` directives. The author accepts no liability for misuse, rate limits, IP blocks, or legal disputes resulting from scraping activities.
+              </p>
+            </div>
+          </div>
+        </details>
+      </div>
     </div>
   );
 }
